@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-import { ScrollView, ActivityIndicator, View, StatusBar, TouchableOpacity } from 'react-native';
+import { ScrollView, ActivityIndicator, View, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { getDocs, collection, query } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import {
@@ -10,7 +11,6 @@ import {
   ImgHeader,
   TextHeader,
   InputSearch,
-  ClearSearch,
   BodyApp,
   CardBody,
   SiglaCard,
@@ -18,6 +18,7 @@ import {
   PessoaCard,
   RamalCard,
   SearchNotFound,
+  BtnAdd,
 } from './HomeStyles';
 
 import Logo from '../src/brasao.png';
@@ -28,6 +29,7 @@ const Home = () => {
   const [filteredSetores, setFilteredSetores] = useState([]);
   const [searchNotFound, setSearchNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchSetores = async () => {
@@ -107,13 +109,16 @@ const Home = () => {
     setSearchValue('');
   };
 
+  const handleAddContact = () => {
+    navigation.navigate('Login');
+  }
+
   return (
     <Container>
-      <StatusBar backgroundColor="#008000" barStyle="light-content" />
       <HeaderApp>
         <TextHeader>
           <ImgHeader source={Logo} />
-          Agenda PGE/PA
+          Agenda PGE-PA
         </TextHeader>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <InputSearch
@@ -123,10 +128,13 @@ const Home = () => {
             onChangeText={(text) => setSearchValue(text)}
           />
           {searchValue !== '' && (
-            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 10, top: 37 }}>
+            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 10, top: 53 }}>
               <Icon2 name="close" size={24} color="white" />
             </TouchableOpacity>
           )}
+          <TouchableOpacity onPress={handleAddContact} style={{ position: 'absolute', right: 10, top: 2 }}>
+            <Icon name="account-plus" size={30} color="#008000" />
+          </TouchableOpacity>
         </View>
 
       </HeaderApp>
@@ -145,13 +153,13 @@ const Home = () => {
                     <CardBody key={gerente.id}>
                       <SiglaCard>{setor.sigla}</SiglaCard>
                       <TitleCard>
-                        <Icon name="office-building-marker" size={30} color="#008000" /> {setor.title}
+                        <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
                       </TitleCard>
                       <PessoaCard>
-                        <Icon name="account-group" size={30} color="#008000" /> Responsável: {gerente.nome}
+                        <Icon name="account-group" size={25} color="#008000" /> Responsável: {gerente.nome}
                       </PessoaCard>
                       <RamalCard>
-                        <Icon name="phone" size={30} color="#008000" /> Ramal: {gerente.ramal}
+                        <Icon name="phone" size={25} color="#008000" /> Ramal: {gerente.ramal}
                       </RamalCard>
                     </CardBody>
                   ))}

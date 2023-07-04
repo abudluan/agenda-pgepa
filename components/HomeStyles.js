@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 
 export const Container = styled.View`
     height: 100%;
+    background-color: #FFFFFF;
 `;
 
 export const HeaderApp = styled.View`
@@ -19,10 +20,11 @@ export const TextHeader = styled.Text`
     font-size: 38px;
     margin: auto;
     font-weight: bold;
+    
 `;
 
 export const InputSearch = styled.TextInput`
-    margin-top: 30px;
+    margin-top: 45px;
     width: 95%;
     height: 40px;
     padding-left: 10px;
