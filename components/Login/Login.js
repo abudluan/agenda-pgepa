@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { NativeBaseProvider } from "native-base";
-import { TouchableOpacity } from "react-native";
 import {
     Container,
     TitleInputLogin,
@@ -13,7 +12,7 @@ import {
 
 const Login = () => {
 
-
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <NativeBaseProvider>

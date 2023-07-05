@@ -1,4 +1,5 @@
 import styled from 'styled-components/native';
+import { Button } from 'native-base';
 
 export const Container = styled.View`
     height: 100%;
@@ -20,7 +21,6 @@ export const TextHeader = styled.Text`
     font-size: 38px;
     margin: auto;
     font-weight: bold;
-    
 `;
 
 export const InputSearch = styled.TextInput`
@@ -35,6 +35,20 @@ export const InputSearch = styled.TextInput`
 
 export const BodyApp = styled.View`
     align-items: center;
+`;
+
+export const CardControl = styled.View`
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+`;
+
+export const TextCardControl = styled.Text`
+    color:  #008000;
+`;
+
+export const BtnLogin = styled(Button)`
+background-color: #008000;
 `;
 
 export const CardBody = styled.View`
