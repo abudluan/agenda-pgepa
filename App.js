@@ -14,7 +14,14 @@ const App = () => {
       <StatusBar backgroundColor="#008000" barStyle="light-content" />
       <Stack.Navigator >
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={Login} options={{
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#008000',
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: '#fff'
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
