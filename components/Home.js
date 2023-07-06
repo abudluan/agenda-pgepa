@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClearIcon from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner } from 'native-base';
+import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { getDocs, collection, query, doc, deleteDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -356,15 +356,22 @@ const Home = () => {
       </Container>
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
         <Modal.Content>
+          <Modal.CloseButton position="absolute" top={0} right={0} onPress={() => setShowDeleteModal(false)}>
+            <Icon name="close" size={24} color="gray" />
+          </Modal.CloseButton>
           <Modal.Header>Excluir Contato</Modal.Header>
           <Modal.Body>
             <Text>Deseja realmente excluir este contato?</Text>
           </Modal.Body>
           <Modal.Footer>
-            <Button.Group space={2}>
-              <Button onPress={handleExcluirContato}>Sim</Button>
-              <Button onPress={() => setShowDeleteModal(false)}>Não</Button>
-            </Button.Group>
+            <Box flexDirection="row" justifyContent="flex-end">
+              <Button variant="ghost" onPress={() => setShowDeleteModal(false)}>
+                Cancelar
+              </Button>
+              <Button colorScheme="danger" onPress={handleExcluirContato}>
+                Excluir
+              </Button>
+            </Box>
           </Modal.Footer>
         </Modal.Content>
       </Modal>
