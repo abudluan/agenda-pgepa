@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClearIcon from 'react-native-vector-icons/MaterialIcons';
-import { ScrollView, ActivityIndicator, View, TouchableOpacity } from 'react-native';
+import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { getDocs, collection, query } from 'firebase/firestore';
+import { getDocs, collection, query, doc, deleteDoc } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
 import {
@@ -39,7 +39,8 @@ const Home = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const fetchSetores = async () => {
@@ -193,6 +194,40 @@ const Home = () => {
     setShowModal(false);
   };
 
+  const handleSelectContact = (setorId, contatoId) => {
+    setSelectedContact({ setorId, contatoId });
+    setShowDeleteModal(true);
+  };
+
+  const handleExcluirContato = async () => {
+    try {
+      if (selectedContact) {
+        
+        // Excluir documento do setor
+        await deleteDoc(doc(db, 'setores', selectedContact.setorId));
+  
+        setSelectedContact(null);
+        setShowDeleteModal(false);
+        Toast.show({
+          title: 'Contato excluído',
+          description: 'O contato foi excluído com sucesso.',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao excluir o contato:', error);
+      Toast.show({
+        title: 'Erro ao excluir',
+        description: 'Ocorreu um erro ao excluir o contato. Por favor, tente novamente mais tarde.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
 
   return (
     <NativeBaseProvider>
@@ -300,7 +335,7 @@ const Home = () => {
                             <TouchableOpacity style={{ right: 25, top: 10 }}>
                               <Icon name="account-edit" size={30} color="#008000" />
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ right: 15, top: 10 }}>
+                            <TouchableOpacity  onPress={() => handleSelectContact(setor.id, gerente.id)} style={{ right: 15, top: 10 }}>
                               <Icon name="delete" size={30} color="#008000" />
                             </TouchableOpacity>
                           </CardControl>
@@ -316,6 +351,21 @@ const Home = () => {
           )}
         </ScrollView>
       </Container>
+      <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header>Excluir Contato</Modal.Header>
+          <Modal.Body>
+            <Text>Deseja realmente excluir este contato?</Text>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button colorScheme="danger" onPress={handleExcluirContato}>Excluir</Button>
+              <Button variant="ghost" onPress={() => setShowDeleteModal(false)}>Cancelar</Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
     </NativeBaseProvider>
   );
 }
