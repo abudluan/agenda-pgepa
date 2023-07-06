@@ -8,7 +8,7 @@ import {
     TitleInput,
     ContactInput,
     BtnCadastro
-} from "./EditCardStyles";
+} from "./AddContactStyles";
 
 const EditCard = () => {
     const [title, setTitle] = useState('');

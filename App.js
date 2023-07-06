@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 
 import Home from './components/Home';
-import EditCard from './components/EditCard/EditCard';
+import AddContact from './components/AddContact/AddContact';
 
 const Stack = createStackNavigator();
 
@@ -14,7 +14,7 @@ const App = () => {
       <StatusBar backgroundColor="#008000" barStyle="light-content" />
       <Stack.Navigator >
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="EditCard" component={EditCard} options={{
+        <Stack.Screen name="AddContact" component={AddContact} options={{
           headerShown: true,
           title: 'Cadastro de contato',
           headerStyle: {
