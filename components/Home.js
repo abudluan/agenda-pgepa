@@ -151,7 +151,8 @@ const Home = () => {
           status: 'error',
           duration: 3000,
           isClosable: true,
-        });
+        })
+        setLoading(false);
       });
   };
 
@@ -217,9 +218,9 @@ const Home = () => {
                 </Modal.Body>
                 <Modal.Footer>
                   <Button.Group space={2}>
-                      <BtnLogin onPress={handleLogin}>
-                        {loading ? <Spinner color="white" /> : 'Entrar'}
-                      </BtnLogin>
+                    <BtnLogin onPress={handleLogin}>
+                      {loading ? <Spinner color="white" /> : 'Entrar'}
+                    </BtnLogin>
                   </Button.Group>
                 </Modal.Footer>
               </Modal.Content>
