@@ -237,23 +237,18 @@ const Home = () => {
             </View>
           ) : (
             <BodyApp>
+              {isUserLoggedIn && (
+                <View style={{ left: 155, top: 10 }}>
+                  <TouchableOpacity >
+                    <Icon name="account-plus" size={30} color="#008000" />
+                  </TouchableOpacity>
+                </View>
+              )}
               {!searchNotFound ? (
                 filteredSetores.map((setor) => (
                   <React.Fragment key={setor.id}>
                     {setor.gerentes.map((gerente) => (
                       <CardBody key={gerente.id}>
-                        {isUserLoggedIn && (
-                          <CardControl>
-                            <TouchableOpacity style={{ right: 30, top: 10 }}>
-                              <Icon name="account-edit" size={30} color="#008000" style={{ right: -5 }} />
-                              <TextCardControl>Editar</TextCardControl>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{ right: 10, top: 10 }}>
-                              <Icon name="delete" size={30} color="#008000" style={{ right: -8 }} />
-                              <TextCardControl>Apagar</TextCardControl>
-                            </TouchableOpacity>
-                          </CardControl>
-                        )}
                         <SiglaCard>{setor.sigla}</SiglaCard>
                         <TitleCard>
                           <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
@@ -264,6 +259,16 @@ const Home = () => {
                         <RamalCard>
                           <Icon name="phone" size={25} color="#008000" /> Ramal: {gerente.ramal}
                         </RamalCard>
+                        {isUserLoggedIn && (
+                          <CardControl>
+                            <TouchableOpacity style={{ right: 25, top: 10 }}>
+                              <Icon name="account-edit" size={30} color="#008000" />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{ right: 15, top: 10 }}>
+                              <Icon name="delete" size={30} color="#008000" />
+                            </TouchableOpacity>
+                          </CardControl>
+                        )}
                       </CardBody>
                     ))}
                   </React.Fragment>
