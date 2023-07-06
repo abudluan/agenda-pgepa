@@ -39,8 +39,8 @@ const Home = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [selectedContact, setSelectedContact] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedContact, setSelectedContact] = useState(null);
 
   useEffect(() => {
     const fetchSetores = async () => {
@@ -202,12 +202,10 @@ const Home = () => {
   const handleExcluirContato = async () => {
     try {
       if (selectedContact) {
-        
-        // Excluir documento do setor
-        await deleteDoc(doc(db, 'setores', selectedContact.setorId));
-  
-        setSelectedContact(null);
-        setShowDeleteModal(false);
+        const { setorId, contatoId } = selectedContact;
+        // Excluir o documento do contato
+        await deleteDoc(doc(db, 'setores', setorId, 'gerentes', contatoId));
+        // Exibir mensagem de sucesso
         Toast.show({
           title: 'Contato excluído',
           description: 'O contato foi excluído com sucesso.',
@@ -215,9 +213,13 @@ const Home = () => {
           duration: 3000,
           isClosable: true,
         });
+        // Fechar o modal e redefinir o contato selecionado
+        setShowDeleteModal(false);
+        setSelectedContact(null);
       }
     } catch (error) {
       console.error('Erro ao excluir o contato:', error);
+      // Exibir mensagem de erro
       Toast.show({
         title: 'Erro ao excluir',
         description: 'Ocorreu um erro ao excluir o contato. Por favor, tente novamente mais tarde.',
@@ -227,6 +229,7 @@ const Home = () => {
       });
     }
   };
+
 
 
   return (
@@ -335,7 +338,7 @@ const Home = () => {
                             <TouchableOpacity style={{ right: 25, top: 10 }}>
                               <Icon name="account-edit" size={30} color="#008000" />
                             </TouchableOpacity>
-                            <TouchableOpacity  onPress={() => handleSelectContact(setor.id, gerente.id)} style={{ right: 15, top: 10 }}>
+                            <TouchableOpacity onPress={() => handleSelectContact(setor.id, gerente.id)} style={{ right: 15, top: 10 }}>
                               <Icon name="delete" size={30} color="#008000" />
                             </TouchableOpacity>
                           </CardControl>
@@ -352,16 +355,15 @@ const Home = () => {
         </ScrollView>
       </Container>
       <Modal isOpen={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
-        <Modal.Content maxWidth="400px">
-          <Modal.CloseButton />
+        <Modal.Content>
           <Modal.Header>Excluir Contato</Modal.Header>
           <Modal.Body>
             <Text>Deseja realmente excluir este contato?</Text>
           </Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>
-              <Button colorScheme="danger" onPress={handleExcluirContato}>Excluir</Button>
-              <Button variant="ghost" onPress={() => setShowDeleteModal(false)}>Cancelar</Button>
+              <Button onPress={handleExcluirContato}>Sim</Button>
+              <Button onPress={() => setShowDeleteModal(false)}>Não</Button>
             </Button.Group>
           </Modal.Footer>
         </Modal.Content>
