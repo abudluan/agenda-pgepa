@@ -4,45 +4,33 @@ import { Button } from "native-base";
 export const Container = styled.View`
     height: 100%;
     background-color: #FFFFFF;
-    align-items:center;
+    
 `;
 
-export const TitleInputLogin = styled.Text`
-    margin-top: 120px;
+export const TitleInput = styled.Text`
+    margin-top: 50px;
+    margin-left: 20px;
     margin-bottom: 5px;
     color: black;
     font-size: 20px;
     text-align: left;
 `;
 
-export const InputLogin = styled.TextInput`
-    width: 80%;
+export const ContactInput = styled.TextInput`
+    width: 90%;
     height: 40px;
+    margin-left: 20px;
     padding-left: 10px;
     border-radius:5px;
     background-color: #008000;
     color: white;
 `;
 
-export const TitleInputPass = styled.Text`
-    margin-top: 40px;
-    margin-bottom: 5px;
-    color: black;
-    font-size: 20px;
-`;
-
-export const InputPass = styled.TextInput`
-    width: 80%;
-    height: 40px;
-    padding-left: 10px;
-    border-radius:5px;
+export const BtnCadastro = styled(Button)`
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 15px;
+    width: 50%;
     background-color: #008000;
-    color: white;
-`;
-
-export const BtnLogin = styled(Button)`
-  margin-top: 50px;
-  width: 180px;
-  background-color: #008000;
 
 `;

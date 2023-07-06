@@ -1,39 +1,52 @@
 import React, { useState } from "react";
 import { NativeBaseProvider } from "native-base";
+import { ScrollView } from 'react-native';
 import {
     Container,
-    TitleInputLogin,
-    TitleInputPass,
-    InputLogin,
-    InputPass,
-    BtnLogin
+    TitleInput,
+    ContactInput,
+    BtnCadastro
 }
     from "./EditCardStyles";
 
 const EditCard = () => {
 
-    const [showModal, setShowModal] = useState(false);
+    
 
     return (
         <NativeBaseProvider>
             <Container>
 
-                <TitleInputLogin>Email</TitleInputLogin>
+                <ScrollView>
 
-                <InputLogin
-                    keyboardType="email-address"
-                />
+                    <TitleInput>Setor</TitleInput>
+                    <ContactInput
+                        placeholder="Digite o nome completo do setor"
+                        placeholderTextColor="#fff"
+                    />
 
-                <TitleInputPass>Senha</TitleInputPass>
+                    <TitleInput>Sigla</TitleInput>
+                    <ContactInput
+                        placeholder="Digite somente a sigla do setor"
+                        placeholderTextColor="#fff"
+                    />
 
-                <InputPass
-                    secureTextEntry
-                />
+                    <TitleInput>Nome(s)</TitleInput>
+                    <ContactInput
+                        placeholder="Informe o nome do(s) responsável(eis)"
+                        placeholderTextColor="#fff"
+                    />
 
+                    <TitleInput>Ramal</TitleInput>
+                    <ContactInput
+                        placeholder="Informe o ramal do setor"
+                        placeholderTextColor="#fff"
+                        keyboardType="numeric"
+                    />
 
-                <BtnLogin>Entrar</BtnLogin>
+                    <BtnCadastro>Cadastrar</BtnCadastro>
 
-
+                </ScrollView>
             </Container>
         </NativeBaseProvider>
     );

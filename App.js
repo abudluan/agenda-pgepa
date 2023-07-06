@@ -14,7 +14,15 @@ const App = () => {
       <StatusBar backgroundColor="#008000" barStyle="light-content" />
       <Stack.Navigator >
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="EditCard" component={EditCard} />
+        <Stack.Screen name="EditCard" component={EditCard} options={{
+          headerShown: true,
+          title: 'Cadastro de contato',
+          headerStyle: {
+            backgroundColor: '#008000',
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: '#fff',
+        }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

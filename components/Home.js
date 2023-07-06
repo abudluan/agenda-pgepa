@@ -275,7 +275,7 @@ const Home = () => {
             <BodyApp>
               {isUserLoggedIn && (
                 <View style={{ left: 155, top: 0 }}>
-                  <TouchableOpacity >
+                  <TouchableOpacity onPress={() => navigation.navigate('EditCard')}>
                     <Icon name="account-plus" size={30} color="#008000" />
                   </TouchableOpacity>
                 </View>
