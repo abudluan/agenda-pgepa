@@ -202,7 +202,7 @@ const Home = () => {
             <ImgHeader source={Logo} />
             Agenda PGE-PA
           </TextHeader>
-          <View style={{ position: 'absolute', right: 16, top: 28 }}>
+          <View style={{ position: 'absolute', right: 16, top: 25 }}>
             {isUserLoggedIn ? (
               <TouchableOpacity onPress={handleLogout}>
                 <Icon name="logout" size={30} color="white" />
