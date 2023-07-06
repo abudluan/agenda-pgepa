@@ -132,7 +132,8 @@ const Home = () => {
         status: 'warning',
         duration: 3000,
         isClosable: true,
-      });
+      })
+      setLoading(false);;
       return;
     }
 
