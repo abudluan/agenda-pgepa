@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'react-native';
 
 import Home from './components/Home';
-import Login from './components/Login/Login';
+import EditCard from './components/EditCard/EditCard';
 
 const Stack = createStackNavigator();
 
@@ -14,14 +14,7 @@ const App = () => {
       <StatusBar backgroundColor="#008000" barStyle="light-content" />
       <Stack.Navigator >
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: '#008000',
-          },
-          headerTitleAlign: 'center',
-          headerTintColor: '#fff'
-        }} />
+        <Stack.Screen name="EditCard" component={EditCard} />
       </Stack.Navigator>
     </NavigationContainer>
   );

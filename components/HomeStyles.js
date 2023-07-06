@@ -7,24 +7,27 @@ export const Container = styled.View`
 `;
 
 export const HeaderApp = styled.View`
-    margin-top: 20px;
     align-items:center;
+    background-color: #008000;
+    padding-top: 20px;
     
 `;
 
 export const ImgHeader = styled.Image`
-    height: 50px;
-    width: 50px;
+    height: 30px;
+    width: 30px;
 `;
 
 export const TextHeader = styled.Text`
-    font-size: 38px;
+    height: 80px;
+    color: white;
+    font-size: 24px;
     margin: auto;
     font-weight: bold;
 `;
 
 export const InputSearch = styled.TextInput`
-    margin-top: 45px;
+    margin-top: 35px;
     width: 95%;
     height: 40px;
     padding-left: 10px;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClearIcon from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView, ActivityIndicator, View, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { getDocs, collection, query } from 'firebase/firestore';
@@ -38,7 +39,6 @@ const Home = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loggingIn, setLoggingIn] = useState(false);
 
 
   useEffect(() => {
@@ -123,6 +123,23 @@ const Home = () => {
     setShowModal(true);
   };
 
+  useEffect(() => {
+    checkAuthenticationStatus();
+  }, []);
+
+  const checkAuthenticationStatus = async () => {
+    try {
+      const value = await AsyncStorage.getItem('isUserLoggedIn');
+      if (value === 'true') {
+        setIsUserLoggedIn(true);
+      } else {
+        setIsUserLoggedIn(false);
+      }
+    } catch (error) {
+      console.log('Erro ao verificar o estado de autenticação:', error);
+    }
+  };
+
   const handleLogin = () => {
     setLoading(true);
     if (!email || !password) {
@@ -141,6 +158,13 @@ const Home = () => {
       .then((userCredential) => {
         console.log('Usuário logado:', userCredential.user);
         setIsUserLoggedIn(true);
+        AsyncStorage.setItem('isUserLoggedIn', 'true')
+          .then(() => {
+            console.log('Estado de autenticação armazenado com sucesso.');
+          })
+          .catch((error) => {
+            console.log('Erro ao armazenar o estado de autenticação:', error);
+          });
         setShowModal(false);
         setLoading(false);
       })
@@ -152,13 +176,20 @@ const Home = () => {
           status: 'error',
           duration: 3000,
           isClosable: true,
-        })
+        });
         setLoading(false);
       });
   };
 
   const handleLogout = () => {
     setIsUserLoggedIn(false);
+    AsyncStorage.removeItem('isUserLoggedIn')
+      .then(() => {
+        console.log('Estado de autenticação removido com sucesso.');
+      })
+      .catch((error) => {
+        console.log('Erro ao remover o estado de autenticação:', error);
+      });
     setShowModal(false);
   };
 
@@ -171,29 +202,19 @@ const Home = () => {
             <ImgHeader source={Logo} />
             Agenda PGE-PA
           </TextHeader>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <InputSearch
-              placeholder="Digite sua pesquisa..."
-              placeholderTextColor="#fff"
-              value={searchValue}
-              onChangeText={(text) => setSearchValue(text)}
-            />
-            {searchValue !== '' && (
-              <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 10, top: 53 }}>
-                <ClearIcon name="close" size={24} color="white" />
+          <View style={{ position: 'absolute', right: 16, top: 28 }}>
+            {isUserLoggedIn ? (
+              <TouchableOpacity onPress={handleLogout}>
+                <Icon name="logout" size={30} color="white" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={handleFormLogin}>
+                <Icon name="login" size={30} color="white" />
               </TouchableOpacity>
             )}
-            <View style={{ position: 'absolute', right: 10, top: 2 }}>
-              {isUserLoggedIn ? (
-                <TouchableOpacity onPress={handleLogout}>
-                  <Icon name="logout" size={30} color="#008000" />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={handleFormLogin}>
-                  <Icon name="login" size={30} color="#008000" />
-                </TouchableOpacity>
-              )}
-            </View>
+          </View>
+
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
               <Modal.Content maxWidth="400px">
@@ -228,7 +249,22 @@ const Home = () => {
             </Modal>
           </View>
 
+
         </HeaderApp>
+
+        <View style={{ top: -15, alignItems: 'center' }}>
+          <InputSearch
+            placeholder="Digite sua pesquisa..."
+            placeholderTextColor="#fff"
+            value={searchValue}
+            onChangeText={(text) => setSearchValue(text)}
+          />
+          {searchValue !== '' && (
+            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 20, top: 42 }}>
+              <ClearIcon name="close" size={24} color="white" />
+            </TouchableOpacity>
+          )}
+        </View>
 
         <ScrollView>
           {loading ? (
@@ -238,7 +274,7 @@ const Home = () => {
           ) : (
             <BodyApp>
               {isUserLoggedIn && (
-                <View style={{ left: 155, top: 10 }}>
+                <View style={{ left: 155, top: 0 }}>
                   <TouchableOpacity >
                     <Icon name="account-plus" size={30} color="#008000" />
                   </TouchableOpacity>

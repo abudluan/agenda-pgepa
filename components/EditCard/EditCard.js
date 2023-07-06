@@ -8,9 +8,9 @@ import {
     InputPass,
     BtnLogin
 }
-    from "./LoginStyles";
+    from "./EditCardStyles";
 
-const Login = () => {
+const EditCard = () => {
 
     const [showModal, setShowModal] = useState(false);
 
@@ -39,4 +39,4 @@ const Login = () => {
     );
 }
 
-export default Login;
+export default EditCard;
