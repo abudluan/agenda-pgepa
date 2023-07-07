@@ -19,7 +19,7 @@ const EditContact = () => {
     const [sigla, setSigla] = useState('');
     const [nome, setNome] = useState('');
     const [ramal, setRamal] = useState('');
-
+    
     useEffect(() => {
         const fetchSetor = async () => {
             try {
@@ -43,24 +43,26 @@ const EditContact = () => {
     const handleUpdateSetor = async () => {
         try {
             const docRef = doc(db, 'setores', setorId);
+            
             await updateDoc(docRef, {
                 title,
                 sigla,
                 nome,
                 ramal,
+                
             });
 
             // Exibir mensagem de sucesso
             Toast.show({
                 title: 'Atualizado',
-                description: 'O setor foi atualizado com sucesso.',
+                description: 'Contato atualizado com sucesso!',
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
             });
 
             // Redirecionar para a tela Home
-            navigation.navigate('Home');
+            
         } catch (error) {
             console.error('Erro ao atualizar o setor:', error);
             // Exibir mensagem de erro
