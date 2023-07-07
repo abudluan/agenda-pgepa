@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { collection, addDoc, setDoc, doc, query, where, getDocs } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebaseConfig';
-import { NativeBaseProvider, Toast } from "native-base";
+import { NativeBaseProvider, Toast, Spinner } from "native-base";
 import { ScrollView } from 'react-native';
 import {
     Container,
@@ -10,11 +10,13 @@ import {
     BtnCadastro
 } from "./AddContactStyles";
 
-const EditCard = () => {
+const AddContact = () => {
+
     const [title, setTitle] = useState('');
     const [sigla, setSigla] = useState('');
     const [nome, setNome] = useState('');
     const [ramal, setRamal] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleCadastro = async () => {
         const trimmedTitle = title.trim();
@@ -33,48 +35,32 @@ const EditCard = () => {
             })
             return;
         }
+
         try {
             // Verifique se o nome já existe
-            const nomeQuery = query(collection(db, 'setores', trimmedSigla, 'gerentes'), where('nome', '==', trimmedNome));
+            const nomeQuery = query(collection(db, 'setores'), where('nome', '==', trimmedNome));
             const nomeQuerySnapshot = await getDocs(nomeQuery);
 
             if (!nomeQuerySnapshot.empty) {
                 Toast.show({
                     title: 'Nome já existe',
-                    description: 'O nome informado já está cadastrado para o setor.',
+                    description: 'O nome informado já está cadastrado.',
                     status: 'warning',
                     duration: 3000,
                     isClosable: true,
                 });
+                setLoading(false);
                 return;
             }
 
-            // Verifique se o ramal já existe
-            const ramalQuery = query(collection(db, 'setores', trimmedSigla, 'gerentes'), where('ramal', '==', trimmedRamal));
-            const ramalQuerySnapshot = await getDocs(ramalQuery);
-
-            if (!ramalQuerySnapshot.empty) {
-                Toast.show({
-                    title: 'Ramal já existe',
-                    description: 'O ramal informado já está cadastrado para o setor.',
-                    status: 'warning',
-                    duration: 3000,
-                    isClosable: true,
-                });
-                return;
-            }
-
-            const setorDocRef = doc(db, 'setores', trimmedSigla);
-
-            await setDoc(setorDocRef, {
+            const setorData = {
                 title: trimmedTitle,
                 sigla: trimmedSigla,
-            });
-
-            await addDoc(collection(db, 'setores', trimmedSigla, 'gerentes'), {
                 nome: trimmedNome,
                 ramal: trimmedRamal,
-            });
+            };
+
+            const docRef = await addDoc(collection(db, 'setores'), setorData);
 
             Toast.show({
                 title: 'Cadastro realizado',
@@ -88,6 +74,7 @@ const EditCard = () => {
             setSigla('');
             setNome('');
             setRamal('');
+            setLoading(false);
         } catch (error) {
             console.error('Erro ao cadastrar setor:', error);
 
@@ -98,6 +85,7 @@ const EditCard = () => {
                 duration: 3000,
                 isClosable: true,
             });
+            setLoading(false);
         }
     };
 
@@ -139,11 +127,13 @@ const EditCard = () => {
                         onChangeText={setRamal}
                     />
 
-                    <BtnCadastro onPress={handleCadastro}>Cadastrar</BtnCadastro>
+                    <BtnCadastro onPress={handleCadastro}>
+                    {loading ? <Spinner color="white" /> : 'Cadastrar'}
+                    </BtnCadastro>
                 </ScrollView>
             </Container>
         </NativeBaseProvider>
     );
 }
 
-export default EditCard;
+export default AddContact;

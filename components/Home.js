@@ -5,7 +5,7 @@ import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text } from 'rea
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
-import { getDocs, collection, query, doc, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
 import {
@@ -50,22 +50,8 @@ const Home = () => {
         const setoresSnapshot = await getDocs(collection(db, 'setores'));
         const setoresData = setoresSnapshot.docs.map((doc) => ({
           id: doc.id,
-          title: doc.data().title,
-          sigla: doc.data().sigla,
-          gerentes: [],
+          ...doc.data(),
         }));
-
-        await Promise.all(
-          setoresData.map(async (setor) => {
-            const gerentesSnapshot = await getDocs(query(collection(db, 'setores', setor.id, 'gerentes')));
-            const gerentesData = gerentesSnapshot.docs.map((doc) => ({
-              id: doc.id,
-              nome: doc.data().nome,
-              ramal: doc.data().ramal,
-            }));
-            setor.gerentes = gerentesData;
-          })
-        );
 
         setSetores(setoresData);
         setFilteredSetores(setoresData);
@@ -90,29 +76,22 @@ const Home = () => {
       setFilteredSetores(setores);
       setSearchNotFound(false);
     } else {
-      const filteredSetores = setores.map((setor) => {
-        const filteredGerentes = setor.gerentes.filter((gerente) => {
-          const formattedNome = gerente.nome.toLowerCase();
-          const formattedRamal = gerente.ramal.toLowerCase();
-          const formattedSigla = setor.sigla.toLowerCase();
-          const formattedTitle = setor.title.toLowerCase();
+      const filteredSetores = setores.filter((setor) => {
+        const formattedNome = setor.nome.toLowerCase();
+        const formattedRamal = setor.ramal.toLowerCase();
+        const formattedSigla = setor.sigla.toLowerCase();
+        const formattedTitle = setor.title.toLowerCase();
 
-          return (
-            formattedNome.includes(formattedSearchValue) ||
-            formattedSigla.includes(formattedSearchValue) ||
-            formattedTitle.includes(formattedSearchValue) ||
-            formattedRamal.includes(formattedSearchValue)
-          );
-        });
-
-        return {
-          ...setor,
-          gerentes: filteredGerentes,
-        };
+        return (
+          formattedNome.includes(formattedSearchValue) ||
+          formattedSigla.includes(formattedSearchValue) ||
+          formattedTitle.includes(formattedSearchValue) ||
+          formattedRamal.includes(formattedSearchValue)
+        );
       });
 
       setFilteredSetores(filteredSetores);
-      setSearchNotFound(filteredSetores.every((setor) => setor.gerentes.length === 0));
+      setSearchNotFound(filteredSetores.length === 0);
     }
   };
 
@@ -151,7 +130,7 @@ const Home = () => {
         duration: 3000,
         isClosable: true,
       })
-      setLoading(false);;
+      setLoading(false);
       return;
     }
 
@@ -194,17 +173,17 @@ const Home = () => {
     setShowModal(false);
   };
 
-  const handleSelectContact = (setorId, contatoId) => {
-    setSelectedContact({ setorId, contatoId });
+  const handleSelectContact = (setorId) => {
+    setSelectedContact(setorId);
     setShowDeleteModal(true);
   };
 
   const handleExcluirContato = async () => {
     try {
       if (selectedContact) {
-        const { setorId, contatoId } = selectedContact;
+        const setorId = selectedContact;
         // Excluir o documento do contato
-        await deleteDoc(doc(db, 'setores', setorId, 'gerentes', contatoId));
+        await deleteDoc(doc(db, 'setores', setorId));
         // Exibir mensagem de sucesso
         Toast.show({
           title: 'Contato excluído',
@@ -230,8 +209,12 @@ const Home = () => {
     }
   };
 
-  const handleEditContact = (setorId, gerenteId) => {
-    navigation.navigate('EditContact', { setorId, gerenteId });
+  const handleEditContact = (setorId) => {
+    navigation.navigate('EditContact', { setorId });
+  };
+
+  const handleAddContact = () => {
+    navigation.navigate('AddContact');
   };
 
 
@@ -290,8 +273,6 @@ const Home = () => {
               </Modal.Content>
             </Modal>
           </View>
-
-
         </HeaderApp>
 
         <View style={{ top: -15, alignItems: 'center' }}>
@@ -325,30 +306,30 @@ const Home = () => {
               {!searchNotFound ? (
                 filteredSetores.map((setor) => (
                   <React.Fragment key={setor.id}>
-                    {setor.gerentes.map((gerente) => (
-                      <CardBody key={gerente.id}>
-                        <SiglaCard>{setor.sigla}</SiglaCard>
-                        <TitleCard>
-                          <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
-                        </TitleCard>
-                        <PessoaCard>
-                          <Icon name="account-group" size={25} color="#008000" /> Responsável: {gerente.nome}
-                        </PessoaCard>
-                        <RamalCard>
-                          <Icon name="phone" size={25} color="#008000" /> Ramal: {gerente.ramal}
-                        </RamalCard>
-                        {isUserLoggedIn && (
-                          <CardControl>
-                            <TouchableOpacity onPress={() => handleEditContact(setor.id, gerente.id)} style={{ right: 25, top: 10 }}>
-                              <Icon name="account-edit" size={30} color="#008000" />
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => handleSelectContact(setor.id, gerente.id)} style={{ right: 15, top: 10 }}>
-                              <Icon name="delete" size={30} color="#008000" />
-                            </TouchableOpacity>
-                          </CardControl>
-                        )}
-                      </CardBody>
-                    ))}
+
+                    <CardBody key={setor.id}>
+                      <SiglaCard>{setor.sigla}</SiglaCard>
+                      <TitleCard>
+                        <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
+                      </TitleCard>
+                      <PessoaCard>
+                        <Icon name="account-group" size={25} color="#008000" /> Responsável: {setor.nome}
+                      </PessoaCard>
+                      <RamalCard>
+                        <Icon name="phone" size={25} color="#008000" /> Ramal: {setor.ramal}
+                      </RamalCard>
+                      {isUserLoggedIn && (
+                        <CardControl>
+                          <TouchableOpacity onPress={() => handleEditContact(setor.id)} style={{ right: 25, top: 10 }}>
+                            <Icon name="account-edit" size={30} color="#008000" />
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => handleSelectContact(setor.id)} style={{ right: 15, top: 10 }}>
+                            <Icon name="delete" size={30} color="#008000" />
+                          </TouchableOpacity>
+                        </CardControl>
+                      )}
+                    </CardBody>
+
                   </React.Fragment>
                 ))
               ) : (
