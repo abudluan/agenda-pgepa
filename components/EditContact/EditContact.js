@@ -90,7 +90,7 @@ const EditContact = () => {
                     <ContactEdit value={nome} onChangeText={setNome} />
 
                     <TitleEdit>Ramal</TitleEdit>
-                    <ContactEdit value={ramal} onChangeText={setRamal} />
+                    <ContactEdit keyboardType="numeric" value={ramal} onChangeText={setRamal} />
 
                     <BtnEdit onPress={handleUpdateSetor}>Atualizar</BtnEdit>
                 </ScrollView>

@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClearIcon from 'react-native-vector-icons/MaterialIcons';
-import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
+import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
+
 import {
   Container,
   HeaderApp,
@@ -41,29 +42,45 @@ const Home = () => {
   const [password, setPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchSetores = async () => {
+    try {
+      setLoading(true);
+
+      const setoresSnapshot = await getDocs(collection(db, 'setores'));
+      const setoresData = setoresSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setSetores(setoresData);
+      setFilteredSetores(setoresData);
+      setLoading(false);
+      setRefreshing(false); // Parar a animação de atualização
+    } catch (error) {
+      console.log('Erro ao buscar os setores:', error);
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchSetores()
+      .then(() => {
+        setRefreshing(false);
+      })
+      .catch((error) => {
+        console.log('Erro ao atualizar os setores:', error);
+        setRefreshing(false);
+      });
+  };
 
   useEffect(() => {
-    const fetchSetores = async () => {
-      try {
-        setLoading(true);
-
-        const setoresSnapshot = await getDocs(collection(db, 'setores'));
-        const setoresData = setoresSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        setSetores(setoresData);
-        setFilteredSetores(setoresData);
-        setLoading(false);
-      } catch (error) {
-        console.log('Erro ao buscar os setores:', error);
-        setLoading(false);
-      }
-    };
-
     fetchSetores();
   }, []);
+
 
   useEffect(() => {
     handleSearch();
@@ -217,8 +234,6 @@ const Home = () => {
     navigation.navigate('AddContact');
   };
 
-
-
   return (
     <NativeBaseProvider>
       <Container>
@@ -227,20 +242,19 @@ const Home = () => {
             <ImgHeader source={Logo} />
             Agenda PGE-PA
           </TextHeader>
-          <View style={{ position: 'absolute', right: 16, top: 25 }}>
+          <View style={{ position: 'absolute', right: 16, top: 27 }}>
             {isUserLoggedIn ? (
               <TouchableOpacity onPress={handleLogout}>
-                <Icon name="logout" size={30} color="white" />
+                <Icon name="logout" size={28} color="white" />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={handleFormLogin}>
-                <Icon name="login" size={30} color="white" />
+                <Icon name="login" size={28} color="white" />
               </TouchableOpacity>
             )}
           </View>
 
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-
             <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
               <Modal.Content maxWidth="400px">
                 <Modal.CloseButton />
@@ -283,13 +297,17 @@ const Home = () => {
             onChangeText={(text) => setSearchValue(text)}
           />
           {searchValue !== '' && (
-            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 20, top: 42 }}>
+            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 20, top: 43 }}>
               <ClearIcon name="close" size={24} color="white" />
             </TouchableOpacity>
           )}
         </View>
 
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+        >
           {loading ? (
             <View style={{ padding: 100 }}>
               <ActivityIndicator size="large" color="#008000" />
@@ -306,7 +324,6 @@ const Home = () => {
               {!searchNotFound ? (
                 filteredSetores.map((setor) => (
                   <React.Fragment key={setor.id}>
-
                     <CardBody key={setor.id}>
                       <SiglaCard>{setor.sigla}</SiglaCard>
                       <TitleCard>
@@ -329,7 +346,6 @@ const Home = () => {
                         </CardControl>
                       )}
                     </CardBody>
-
                   </React.Fragment>
                 ))
               ) : (
@@ -362,6 +378,6 @@ const Home = () => {
       </Modal>
     </NativeBaseProvider>
   );
-}
+};
 
 export default Home;

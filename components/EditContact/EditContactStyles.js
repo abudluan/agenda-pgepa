@@ -9,7 +9,7 @@ export const Container = styled.View`
 
 export const TitleEdit = styled.Text`
     margin-top: 50px;
-    margin-left: 20px;
+    margin-left: 50px;
     margin-bottom: 5px;
     color: black;
     font-size: 20px;
@@ -17,9 +17,9 @@ export const TitleEdit = styled.Text`
 `;
 
 export const ContactEdit = styled.TextInput`
-    width: 90%;
+    width: 75%;
     height: 40px;
-    margin-left: 20px;
+    margin: auto;
     padding-left: 10px;
     border-radius:5px;
     background-color: #008000;
