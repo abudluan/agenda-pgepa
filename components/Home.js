@@ -230,6 +230,10 @@ const Home = () => {
     }
   };
 
+  const handleEditContact = (setorId, gerenteId) => {
+    navigation.navigate('EditContact', { setorId, gerenteId });
+  };
+
 
 
   return (
@@ -335,7 +339,7 @@ const Home = () => {
                         </RamalCard>
                         {isUserLoggedIn && (
                           <CardControl>
-                            <TouchableOpacity style={{ right: 25, top: 10 }}>
+                            <TouchableOpacity onPress={() => handleEditContact(setor.id, gerente.id)} style={{ right: 25, top: 10 }}>
                               <Icon name="account-edit" size={30} color="#008000" />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => handleSelectContact(setor.id, gerente.id)} style={{ right: 15, top: 10 }}>
