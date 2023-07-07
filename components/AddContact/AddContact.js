@@ -40,7 +40,7 @@ const AddContact = () => {
             // Verifique se o nome já existe
             const nomeQuery = query(collection(db, 'setores'), where('nome', '==', trimmedNome));
             const nomeQuerySnapshot = await getDocs(nomeQuery);
-
+            
             if (!nomeQuerySnapshot.empty) {
                 Toast.show({
                     title: 'Nome já existe',
@@ -49,7 +49,7 @@ const AddContact = () => {
                     duration: 3000,
                     isClosable: true,
                 });
-                setLoading(false);
+                
                 return;
             }
 
@@ -58,10 +58,12 @@ const AddContact = () => {
                 sigla: trimmedSigla,
                 nome: trimmedNome,
                 ramal: trimmedRamal,
+                
             };
+            setLoading(true);
 
             const docRef = await addDoc(collection(db, 'setores'), setorData);
-
+            
             Toast.show({
                 title: 'Cadastro realizado',
                 description: 'O setor foi cadastrado com sucesso.',
