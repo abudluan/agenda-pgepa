@@ -42,7 +42,6 @@ const Home = () => {
   const [password, setPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
-  const [refreshing, setRefreshing] = useState(false);
 
   const fetchSetores = async () => {
     try {
@@ -57,24 +56,10 @@ const Home = () => {
       setSetores(setoresData);
       setFilteredSetores(setoresData);
       setLoading(false);
-      setRefreshing(false); // Parar a animação de atualização
     } catch (error) {
       console.log('Erro ao buscar os setores:', error);
       setLoading(false);
-      setRefreshing(false);
     }
-  };
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    fetchSetores()
-      .then(() => {
-        setRefreshing(false);
-      })
-      .catch((error) => {
-        console.log('Erro ao atualizar os setores:', error);
-        setRefreshing(false);
-      });
   };
 
   useEffect(() => {
@@ -209,9 +194,9 @@ const Home = () => {
           duration: 3000,
           isClosable: true,
         });
-        // Fechar o modal e redefinir o contato selecionado
         setShowDeleteModal(false);
         setSelectedContact(null);
+        fetchSetores();
       }
     } catch (error) {
       console.error('Erro ao excluir o contato:', error);
@@ -303,11 +288,7 @@ const Home = () => {
           )}
         </View>
 
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-        >
+        <ScrollView>
           {loading ? (
             <View style={{ padding: 100 }}>
               <ActivityIndicator size="large" color="#008000" />
