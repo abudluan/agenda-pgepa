@@ -5,7 +5,7 @@ import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, RefreshCon
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { onSnapshot ,addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
 
@@ -50,24 +50,26 @@ const Home = () => {
     }
   }, [isFocused]);
 
-  const fetchSetores = async () => {
+  const fetchSetores = () => {
     try {
-      setLoading(true);
-
-      const setoresSnapshot = await getDocs(collection(db, 'setores'));
-      const setoresData = setoresSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      setSetores(setoresData);
-      setFilteredSetores(setoresData);
-      setLoading(false);
+      const unsubscribe = onSnapshot(collection(db, 'setores'), (snapshot) => {
+        const setoresData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+  
+        setSetores(setoresData);
+        setFilteredSetores(setoresData);
+        setLoading(false);
+      });
+      
+      return () => unsubscribe();
     } catch (error) {
       console.log('Erro ao buscar os setores:', error);
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchSetores();
