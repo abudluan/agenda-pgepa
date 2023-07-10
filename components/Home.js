@@ -4,7 +4,7 @@ import ClearIcon from 'react-native-vector-icons/MaterialIcons';
 import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
@@ -42,6 +42,14 @@ const Home = () => {
   const [password, setPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
+
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchSetores();
+    }
+  }, [isFocused]);
 
   const fetchSetores = async () => {
     try {
