@@ -23,7 +23,6 @@ import {
   RamalCard,
   SearchNotFound,
   CardControl,
-  TextCardControl,
   BtnLogin
 } from './HomeStyles';
 
@@ -227,15 +226,23 @@ const Home = () => {
     navigation.navigate('AddContact');
   };
 
+
   return (
     <NativeBaseProvider>
       <Container>
         <HeaderApp>
+          {isUserLoggedIn && (
+            <View style={{  position: 'absolute', left: 20, top: 55 }}>
+              <TouchableOpacity onPress={() => navigation.navigate('AddContact')}>
+                <Icon name="account-plus" size={30} color="white" />
+              </TouchableOpacity>
+            </View>
+          )}
           <TextHeader>
             <ImgHeader source={Logo} />
             Agenda PGE-PA
           </TextHeader>
-          <View style={{ position: 'absolute', right: 16, top: 27 }}>
+          <View style={{ position: 'absolute', right: 16, top: 55 }}>
             {isUserLoggedIn ? (
               <TouchableOpacity onPress={handleLogout}>
                 <Icon name="logout" size={28} color="white" />
@@ -286,6 +293,7 @@ const Home = () => {
           <InputSearch
             placeholder="Digite sua pesquisa..."
             placeholderTextColor="#fff"
+            selectionColor={'white'}
             value={searchValue}
             onChangeText={(text) => setSearchValue(text)}
           />
@@ -303,13 +311,6 @@ const Home = () => {
             </View>
           ) : (
             <BodyApp>
-              {isUserLoggedIn && (
-                <View style={{ left: 155, top: 0 }}>
-                  <TouchableOpacity onPress={() => navigation.navigate('AddContact')}>
-                    <Icon name="account-plus" size={30} color="#008000" />
-                  </TouchableOpacity>
-                </View>
-              )}
               {!searchNotFound ? (
                 filteredSetores.map((setor) => (
                   <React.Fragment key={setor.id}>

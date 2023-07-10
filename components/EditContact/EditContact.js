@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NativeBaseProvider, Toast } from "native-base";
+import { NativeBaseProvider, Toast, Spinner } from "native-base";
 import { ScrollView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { updateDoc, doc, getDoc } from 'firebase/firestore';
@@ -19,7 +19,8 @@ const EditContact = () => {
     const [sigla, setSigla] = useState('');
     const [nome, setNome] = useState('');
     const [ramal, setRamal] = useState('');
-    
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         const fetchSetor = async () => {
             try {
@@ -43,26 +44,32 @@ const EditContact = () => {
     const handleUpdateSetor = async () => {
         try {
             const docRef = doc(db, 'setores', setorId);
-            
+
             await updateDoc(docRef, {
                 title,
                 sigla,
                 nome,
                 ramal,
-                
+
             });
+
+            setLoading(true);
 
             // Exibir mensagem de sucesso
             Toast.show({
-                title: 'Atualizado',
-                description: 'Contato atualizado com sucesso!',
+                title: 'Contato atualizado com sucesso!',
+                description: 'Aguarde, você voltará para o início em 5 segundos.',
                 status: 'success',
-                duration: 3000,
+                duration: 5000,
                 isClosable: true,
             });
 
-            // Redirecionar para a tela Home
             
+
+            setTimeout(() => {
+                navigation.navigate('Home');
+            }, 5000);
+
         } catch (error) {
             console.error('Erro ao atualizar o setor:', error);
             // Exibir mensagem de erro
@@ -81,18 +88,20 @@ const EditContact = () => {
             <Container>
                 <ScrollView>
                     <TitleEdit>Setor</TitleEdit>
-                    <ContactEdit value={title} onChangeText={setTitle} />
+                    <ContactEdit selectionColor={'white'} value={title} onChangeText={setTitle} />
 
                     <TitleEdit>Sigla</TitleEdit>
-                    <ContactEdit value={sigla} onChangeText={setSigla} />
+                    <ContactEdit selectionColor={'white'} value={sigla} onChangeText={setSigla} />
 
                     <TitleEdit>Nome(s)</TitleEdit>
-                    <ContactEdit value={nome} onChangeText={setNome} />
+                    <ContactEdit selectionColor={'white'} value={nome} onChangeText={setNome} />
 
                     <TitleEdit>Ramal</TitleEdit>
-                    <ContactEdit keyboardType="numeric" value={ramal} onChangeText={setRamal} />
+                    <ContactEdit selectionColor={'white'} keyboardType="numeric" value={ramal} onChangeText={setRamal} />
 
-                    <BtnEdit onPress={handleUpdateSetor}>Atualizar</BtnEdit>
+                    <BtnEdit onPress={handleUpdateSetor}>
+                    {loading ? <Spinner color="white" /> : 'Atualizar'}
+                    </BtnEdit>
                 </ScrollView>
             </Container>
         </NativeBaseProvider>

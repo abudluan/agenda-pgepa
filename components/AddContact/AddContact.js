@@ -99,6 +99,7 @@ const AddContact = () => {
                     <ContactInput
                         placeholder="Digite o nome completo do setor"
                         placeholderTextColor="#fff"
+                        selectionColor={'white'}
                         value={title}
                         onChangeText={setTitle}
                     />
@@ -107,6 +108,7 @@ const AddContact = () => {
                     <ContactInput
                         placeholder="Digite somente a sigla do setor"
                         placeholderTextColor="#fff"
+                        selectionColor={'white'}
                         autoCapitalize="characters"
                         value={sigla}
                         onChangeText={setSigla}
@@ -116,6 +118,7 @@ const AddContact = () => {
                     <ContactInput
                         placeholder="Informe o nome do(s) responsável(eis)"
                         placeholderTextColor="#fff"
+                        selectionColor={'white'}
                         value={nome}
                         onChangeText={setNome}
                     />
@@ -124,6 +127,7 @@ const AddContact = () => {
                     <ContactInput
                         placeholder="Informe o ramal do setor"
                         placeholderTextColor="#fff"
+                        selectionColor={'white'}
                         keyboardType="numeric"
                         value={ramal}
                         onChangeText={setRamal}
