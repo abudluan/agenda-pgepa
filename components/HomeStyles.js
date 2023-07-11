@@ -52,6 +52,15 @@ export const CardControl = styled.View`
     align-items: center;
 `;
 
+export const AvatarProfile = styled.Image`
+    position: absolute;
+    margin-left: 15px;
+    margin-top: 9px;
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
+`;
+
 export const TextCardControl = styled.Text`
     color:  #008000;
 `;
@@ -74,7 +83,7 @@ export const SiglaCard = styled.Text`
     font-weight: bold;
     font-size: 24px;
     padding-top: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     border-bottom-width: 2px;
     border-bottom-color: #2E8B57;
 `;

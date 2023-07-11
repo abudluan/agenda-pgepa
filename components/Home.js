@@ -17,6 +17,7 @@ import {
   InputSearch,
   BodyApp,
   CardBody,
+  AvatarProfile,
   SiglaCard,
   TitleCard,
   PessoaCard,
@@ -28,6 +29,7 @@ import {
 } from './HomeStyles';
 
 import Logo from '../src/brasao.png';
+import AvatarPhoto from '../src/avatarProfile.png';
 
 const Home = () => {
   const [setores, setSetores] = useState([]);
@@ -327,6 +329,7 @@ const Home = () => {
                   <React.Fragment key={setor.id}>
                     <CardBody key={setor.id}>
                       <SiglaCard>{setor.sigla}</SiglaCard>
+                      <AvatarProfile source={AvatarPhoto} resizeMode="contain"/>
                       <TitleCard>
                         <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
                       </TitleCard>
