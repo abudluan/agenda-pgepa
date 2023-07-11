@@ -88,16 +88,16 @@ const EditContact = () => {
             <Container>
                 <ScrollView>
                     <TitleEdit>Setor</TitleEdit>
-                    <ContactEdit selectionColor={'white'} value={title} onChangeText={setTitle} />
+                    <ContactEdit selectionColor="white" value={title} onChangeText={setTitle} />
 
                     <TitleEdit>Sigla</TitleEdit>
-                    <ContactEdit selectionColor={'white'} value={sigla} onChangeText={setSigla} />
+                    <ContactEdit selectionColor="white" value={sigla} onChangeText={setSigla} />
 
                     <TitleEdit>Nome(s)</TitleEdit>
-                    <ContactEdit selectionColor={'white'} value={nome} onChangeText={setNome} />
+                    <ContactEdit selectionColor="white" value={nome} onChangeText={setNome} />
 
                     <TitleEdit>Ramal</TitleEdit>
-                    <ContactEdit selectionColor={'white'} keyboardType="numeric" value={ramal} onChangeText={setRamal} />
+                    <ContactEdit selectionColor="white" keyboardType="numeric" value={ramal} onChangeText={setRamal} />
 
                     <BtnEdit onPress={handleUpdateSetor}>
                     {loading ? <Spinner color="white" /> : 'Atualizar'}

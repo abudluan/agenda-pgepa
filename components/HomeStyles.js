@@ -10,7 +10,6 @@ export const HeaderApp = styled.View`
     align-items:center;
     background-color: #008000;
     padding-top: 20px;
-    
 `;
 
 export const ImgHeader = styled.Image`
@@ -26,8 +25,15 @@ export const TextHeader = styled.Text`
     font-weight: bold;
 `;
 
+export const BtnRefresh = styled(Button)`
+    width: 30%;
+    margin-top: 10px;
+    margin-left: 258px;
+    background-color: #008000;
+`;
+
 export const InputSearch = styled.TextInput`
-    margin-top: 35px;
+    margin-top: 25px;
     width: 95%;
     height: 40px;
     padding-left: 10px;

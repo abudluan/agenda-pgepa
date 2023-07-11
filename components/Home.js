@@ -5,7 +5,7 @@ import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, RefreshCon
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { onSnapshot ,addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
 
@@ -23,6 +23,7 @@ import {
   RamalCard,
   SearchNotFound,
   CardControl,
+  BtnRefresh,
   BtnLogin
 } from './HomeStyles';
 
@@ -226,13 +227,17 @@ const Home = () => {
     navigation.navigate('AddContact');
   };
 
+  const handleRefresh = () => {
+    fetchSetores();
+  };
+
 
   return (
     <NativeBaseProvider>
       <Container>
         <HeaderApp>
           {isUserLoggedIn && (
-            <View style={{  position: 'absolute', left: 20, top: 55 }}>
+            <View style={{ position: 'absolute', left: 20, top: 55 }}>
               <TouchableOpacity onPress={() => navigation.navigate('AddContact')}>
                 <Icon name="account-plus" size={30} color="white" />
               </TouchableOpacity>
@@ -289,20 +294,26 @@ const Home = () => {
           </View>
         </HeaderApp>
 
+        <View>
+          <BtnRefresh onPress={handleRefresh}>Atualizar</BtnRefresh>
+        </View>
+
         <View style={{ top: -15, alignItems: 'center' }}>
           <InputSearch
             placeholder="Digite sua pesquisa..."
             placeholderTextColor="#fff"
-            selectionColor={'white'}
+            selectionColor="white"
             value={searchValue}
             onChangeText={(text) => setSearchValue(text)}
           />
           {searchValue !== '' && (
-            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 20, top: 43 }}>
+            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 20, top: 32 }}>
               <ClearIcon name="close" size={24} color="white" />
             </TouchableOpacity>
           )}
         </View>
+
+
 
         <ScrollView>
           {loading ? (
