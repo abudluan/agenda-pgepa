@@ -58,7 +58,7 @@ const EditContact = () => {
             // Exibir mensagem de sucesso
             Toast.show({
                 title: 'Contato atualizado com sucesso!',
-                description: 'Aguarde, você voltará para o início em 5 segundos.',
+                description: 'Aguarde, você voltará para a tela inicial em breve.',
                 status: 'success',
                 duration: 5000,
                 isClosable: true,

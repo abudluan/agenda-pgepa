@@ -50,26 +50,24 @@ const Home = () => {
     }
   }, [isFocused]);
 
-  const fetchSetores = () => {
+  const fetchSetores = async () => {
     try {
-      const unsubscribe = onSnapshot(collection(db, 'setores'), (snapshot) => {
-        const setoresData = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-  
-        setSetores(setoresData);
-        setFilteredSetores(setoresData);
-        setLoading(false);
-      });
-      
-      return () => unsubscribe();
+      setLoading(true);
+
+      const setoresSnapshot = await getDocs(collection(db, 'setores'));
+      const setoresData = setoresSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setSetores(setoresData);
+      setFilteredSetores(setoresData);
+      setLoading(false);
     } catch (error) {
       console.log('Erro ao buscar os setores:', error);
       setLoading(false);
     }
   };
-  
 
   useEffect(() => {
     fetchSetores();
