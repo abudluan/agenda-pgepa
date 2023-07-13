@@ -21,6 +21,7 @@ export const ContactInput = styled.TextInput`
     height: 40px;
     margin: auto;
     padding-left: 10px;
+    padding-right: 10px;
     border-radius:5px;
     background-color: #008000;
     color: white;
