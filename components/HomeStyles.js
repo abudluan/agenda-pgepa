@@ -96,7 +96,7 @@ export const TitleCard = styled.Text`
     border-bottom-color: #2E8B57;
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 20px;
 `;
 
