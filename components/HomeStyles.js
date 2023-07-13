@@ -89,6 +89,11 @@ export const SiglaCard = styled.Text`
 `;
 
 export const TitleCard = styled.Text`
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 15px;
+    border-bottom-width: 2px;
+    border-bottom-color: #2E8B57;
     padding-left: 20px;
     padding-right: 20px;
     margin-top: 20px;
