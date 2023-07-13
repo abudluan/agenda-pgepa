@@ -71,7 +71,7 @@ const Home = () => {
       const initialCollapsibleState = setoresData.reduce((acc, setor) => {
         return {
           ...acc,
-          [setor.id]: false,
+          [setor.id]: true,
         };
       }, {});
 
