@@ -90,18 +90,21 @@ export const SiglaCard = styled.Text`
 
 export const TitleCard = styled.Text`
     padding-left: 20px;
+    padding-right: 20px;
     margin-top: 20px;
     font-size: 20px;
 `;
 
 export const PessoaCard = styled.Text`
     padding-left: 20px;
+    padding-right: 20px;
     margin-top: 20px;
     font-size: 20px;
 `;
 
 export const RamalCard = styled.Text`
     padding-left: 20px;
+    padding-right: 20px;
     margin-top: 20px;
     font-size: 20px;
 `;
