@@ -46,8 +46,6 @@ const Home = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [collapsible, setCollapsible] = useState({});
-
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -69,6 +67,15 @@ const Home = () => {
       setSetores(setoresData);
       setFilteredSetores(setoresData);
       setLoading(false);
+
+      const initialCollapsibleState = setoresData.reduce((acc, setor) => {
+        return {
+          ...acc,
+          [setor.id]: false,
+        };
+      }, {});
+
+      setCollapsible(initialCollapsibleState);
     } catch (error) {
       console.log('Erro ao buscar os setores:', error);
       setLoading(false);
@@ -243,7 +250,6 @@ const Home = () => {
     }));
   };
 
-
   return (
     <NativeBaseProvider>
       <Container>
@@ -344,7 +350,7 @@ const Home = () => {
                       <AvatarProfile source={AvatarPhoto} resizeMode="contain" />
                       <Collapsible collapsed={collapsible[setor.id]}>
                         <TitleCard>
-                           {setor.title}
+                          {setor.title}
                         </TitleCard>
                       </Collapsible>
                       <PessoaCard>
