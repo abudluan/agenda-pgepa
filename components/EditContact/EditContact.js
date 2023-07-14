@@ -50,7 +50,6 @@ const EditContact = () => {
                 sigla,
                 nome,
                 ramal,
-
             });
 
             setLoading(true);

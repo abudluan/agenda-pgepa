@@ -225,10 +225,6 @@ const Home = () => {
     navigation.navigate('EditContact', { setorId });
   };
 
-  const handleAddContact = () => {
-    navigation.navigate('AddContact');
-  };
-
   const handleRefresh = () => {
     fetchSetores();
   };
