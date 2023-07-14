@@ -54,21 +54,9 @@ const EditContact = () => {
             });
 
             setLoading(true);
-
-            // Exibir mensagem de sucesso
-            Toast.show({
-                title: 'Contato atualizado com sucesso!',
-                description: 'Aguarde, você voltará para a tela inicial em breve.',
-                status: 'success',
-                duration: 5000,
-                isClosable: true,
-            });
-
             
-
-            setTimeout(() => {
-                navigation.navigate('Home');
-            }, 5000);
+            navigation.navigate('Home');
+            
 
         } catch (error) {
             console.error('Erro ao atualizar o setor:', error);

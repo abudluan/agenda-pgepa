@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClearIcon from 'react-native-vector-icons/MaterialIcons';
-import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
-import Collapsible from 'react-native-collapsible';
+import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, RefreshControl } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -45,7 +44,7 @@ const Home = () => {
   const [password, setPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
-  const [collapsible, setCollapsible] = useState({});
+
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -67,15 +66,6 @@ const Home = () => {
       setSetores(setoresData);
       setFilteredSetores(setoresData);
       setLoading(false);
-
-      const initialCollapsibleState = setoresData.reduce((acc, setor) => {
-        return {
-          ...acc,
-          [setor.id]: true,
-        };
-      }, {});
-
-      setCollapsible(initialCollapsibleState);
     } catch (error) {
       console.log('Erro ao buscar os setores:', error);
       setLoading(false);
@@ -243,12 +233,6 @@ const Home = () => {
     fetchSetores();
   };
 
-  const handleExpand = (setorId) => {
-    setCollapsible((prevState) => ({
-      ...prevState,
-      [setorId]: !prevState[setorId],
-    }));
-  };
 
   return (
     <NativeBaseProvider>
@@ -344,15 +328,11 @@ const Home = () => {
                 filteredSetores.map((setor) => (
                   <React.Fragment key={setor.id}>
                     <CardBody key={setor.id}>
-                      <TouchableOpacity onPress={() => handleExpand(setor.id)}>
-                        <SiglaCard>{setor.sigla}</SiglaCard>
-                      </TouchableOpacity>
-                      <AvatarProfile source={AvatarPhoto} resizeMode="contain" />
-                      <Collapsible collapsed={collapsible[setor.id]}>
-                        <TitleCard>
-                          {setor.title}
-                        </TitleCard>
-                      </Collapsible>
+                      <SiglaCard>{setor.sigla}</SiglaCard>
+                      <AvatarProfile source={AvatarPhoto} resizeMode="contain"/>
+                      <TitleCard>
+                        <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
+                      </TitleCard>
                       <PessoaCard>
                         <Icon name="account-group" size={25} color="#008000" /> Responsável: {setor.nome}
                       </PessoaCard>
