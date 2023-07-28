@@ -74,6 +74,16 @@ const Home = () => {
 
   useEffect(() => {
     fetchSetores();
+
+
+    const interval = setInterval(() => {
+      fetchSetores();
+    }, 3600000);
+
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
 
@@ -225,11 +235,6 @@ const Home = () => {
     navigation.navigate('EditContact', { setorId });
   };
 
-  const handleRefresh = () => {
-    fetchSetores();
-  };
-
-
   return (
     <NativeBaseProvider>
       <Container>
@@ -292,10 +297,6 @@ const Home = () => {
           </View>
         </HeaderApp>
 
-        <View>
-          <BtnRefresh onPress={handleRefresh}>Atualizar</BtnRefresh>
-        </View>
-
         <View style={{ top: -15, alignItems: 'center' }}>
           <InputSearch
             placeholder="Digite sua pesquisa..."
@@ -325,7 +326,7 @@ const Home = () => {
                   <React.Fragment key={setor.id}>
                     <CardBody key={setor.id}>
                       <SiglaCard>{setor.sigla}</SiglaCard>
-                      <AvatarProfile source={AvatarPhoto} resizeMode="contain"/>
+                      <AvatarProfile source={AvatarPhoto} resizeMode="contain" />
                       <TitleCard>
                         <Icon name="office-building-marker" size={25} color="#008000" /> {setor.title}
                       </TitleCard>

@@ -29,7 +29,7 @@ export const BtnRefresh = styled(Button)`
     width: 30%;
     margin-top: 10px;
     margin-left: 258px;
-    background-color: #008000;
+    background-color: black;
 `;
 
 export const InputSearch = styled.TextInput`
