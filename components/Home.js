@@ -8,7 +8,7 @@ import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { db, auth } from '../firebaseConfig';
-
+import { BackHandler } from 'react-native';
 import {
   Container,
   HeaderApp,
@@ -234,6 +234,16 @@ const Home = () => {
   const handleEditContact = (setorId) => {
     navigation.navigate('EditContact', { setorId });
   };
+
+  const handleBackButton = () => {
+    BackHandler.exitApp();
+    return true;
+  };
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <NativeBaseProvider>

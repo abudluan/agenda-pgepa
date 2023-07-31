@@ -5,13 +5,14 @@ import { db } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from "react-native";
 import { NativeBaseProvider, Button, Modal, Box } from 'native-base';
+import * as appJson from '../app.json';
 
 const VerifyVersion = () => {
     const [loading, setLoading] = useState(true);
     const [serverVersion, setServerVersion] = useState('');
     const [showModal, setShowModal] = useState(false);
     const navigation = useNavigation();
-    const currentVersion = '1.0.0';
+    const currentVersion = appJson.expo.version;
 
     useEffect(() => {
         checkAppVersion();
@@ -19,7 +20,9 @@ const VerifyVersion = () => {
 
     const checkAppVersion = async () => {
         try {
-            const versionSnapshot = await getDoc(doc(collection(db, 'version'), 'ZNjkSaZp7AK27IhKcVCd'));
+            const versionSnapshot = await getDoc(
+                doc(collection(db, "version"), "ZNjkSaZp7AK27IhKcVCd")
+            );
             if (versionSnapshot.exists()) {
                 const versionData = versionSnapshot.data();
                 setServerVersion(versionData.update);
@@ -27,14 +30,14 @@ const VerifyVersion = () => {
                 if (currentVersion !== versionData.update) {
                     setShowModal(true);
                 } else {
-                    navigation.navigate('Home');
-                    console.log('Aplicativo esta na ultima versão')
+                    navigation.navigate("Home");
+                    console.log("Aplicativo está na última versão");
                 }
             } else {
-                console.log('Versão do aplicativo não encontrada no Firestore.');
+                console.log("Versão do aplicativo não encontrada no Firestore.");
             }
         } catch (error) {
-            console.log('Erro ao verificar a versão do aplicativo:', error);
+            console.log("Erro ao verificar a versão do aplicativo:", error);
         } finally {
             setLoading(false);
         }
@@ -49,6 +52,7 @@ const VerifyVersion = () => {
         return (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color="#008000" />
+                <Text>Verificando versão do aplicativo</Text>
             </View>
         );
     }
