@@ -3,7 +3,7 @@ import { View, ActivityIndicator, Alert } from 'react-native';
 import { collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
-import { Text } from "react-native";
+import { Text, Linking } from "react-native";
 import { NativeBaseProvider, Button, Modal, Box } from 'native-base';
 import * as appJson from '../app.json';
 
@@ -12,6 +12,7 @@ const VerifyVersion = () => {
     const [serverVersion, setServerVersion] = useState('');
     const [showModal, setShowModal] = useState(false);
     const navigation = useNavigation();
+    const [urlLink, setUrlLink] = useState('');
     const currentVersion = appJson.expo.version;
 
     useEffect(() => {
@@ -26,6 +27,7 @@ const VerifyVersion = () => {
             if (versionSnapshot.exists()) {
                 const versionData = versionSnapshot.data();
                 setServerVersion(versionData.update);
+                setUrlLink(versionData.urlLink);
 
                 if (currentVersion !== versionData.update) {
                     setShowModal(true);
@@ -44,7 +46,9 @@ const VerifyVersion = () => {
     };
 
     const handleUpdateApp = () => {
-        navigation.navigate('Home');
+        if (urlLink) {
+            Linking.openURL(urlLink).catch((err) => console.error('Erro ao abrir a URL:', err));
+        }
     };
 
 
