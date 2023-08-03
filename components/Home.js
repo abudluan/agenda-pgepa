@@ -31,6 +31,8 @@ import {
 import Logo from '../src/brasao.png';
 import AvatarPhoto from '../src/avatarProfile.png';
 
+import LoginModal from './LoginModal.js/LoginModal';
+
 const Home = () => {
   const [setores, setSetores] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -155,32 +157,6 @@ const Home = () => {
       setLoading(false);
       return;
     }
-
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log('Usuário logado:', userCredential.user);
-        setIsUserLoggedIn(true);
-        AsyncStorage.setItem('isUserLoggedIn', 'true')
-          .then(() => {
-            console.log('Estado de autenticação armazenado com sucesso.');
-          })
-          .catch((error) => {
-            console.log('Erro ao armazenar o estado de autenticação:', error);
-          });
-        setShowModal(false);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('Erro de autenticação:', error.message);
-        Toast.show({
-          title: 'Erro de autenticação',
-          description: 'Credenciais inválidas. Por favor, verifique suas informações de login.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        setLoading(false);
-      });
   };
 
   const handleLogout = () => {
@@ -192,7 +168,6 @@ const Home = () => {
       .catch((error) => {
         console.log('Erro ao remover o estado de autenticação:', error);
       });
-    setShowModal(false);
   };
 
   const handleSelectContact = (setorId) => {
@@ -272,39 +247,12 @@ const Home = () => {
             )}
           </View>
 
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
-              <Modal.Content maxWidth="400px">
-                <Modal.CloseButton />
-                <Modal.Header>Login</Modal.Header>
-                <Modal.Body>
-                  <FormControl>
-                    <FormControl.Label>Email</FormControl.Label>
-                    <Input
-                      keyboardType="email-address"
-                      value={email}
-                      onChangeText={(text) => setEmail(text)}
-                    />
-                  </FormControl>
-                  <FormControl mt="3">
-                    <FormControl.Label>Senha</FormControl.Label>
-                    <Input
-                      secureTextEntry
-                      value={password}
-                      onChangeText={(text) => setPassword(text)}
-                    />
-                  </FormControl>
-                </Modal.Body>
-                <Modal.Footer>
-                  <Button.Group space={2}>
-                    <BtnLogin onPress={handleLogin}>
-                      {loading ? <Spinner color="white" /> : 'Entrar'}
-                    </BtnLogin>
-                  </Button.Group>
-                </Modal.Footer>
-              </Modal.Content>
-            </Modal>
-          </View>
+          <LoginModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            setIsUserLoggedIn={setIsUserLoggedIn}
+          />
+
         </HeaderApp>
 
         <View style={{ top: -15, alignItems: 'center' }}>
