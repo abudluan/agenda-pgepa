@@ -86,7 +86,7 @@ const EditContact = () => {
                     <TitleEdit>Ramal</TitleEdit>
                     <ContactEdit selectionColor="white" keyboardType="numeric" value={ramal} onChangeText={setRamal} />
 
-                    <BtnEdit onPress={handleUpdateSetor}>
+                    <BtnEdit onPress={handleUpdateSetor} disabled={loading}>
                     {loading ? <Spinner color="white" /> : 'Atualizar'}
                     </BtnEdit>
                 </ScrollView>

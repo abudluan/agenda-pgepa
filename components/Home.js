@@ -32,7 +32,6 @@ import LoginModal from './LoginModal.js/LoginModal';
 
 const Home = () => {
   const [setores, setSetores] = useState([]);
-  const [searchValue, setSearchValue] = useState('');
   const [filteredSetores, setFilteredSetores] = useState([]);
   const [searchNotFound, setSearchNotFound] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -149,7 +148,10 @@ const Home = () => {
   };
 
   const handlePesquisa = () => {
-    navigation.navigate('Busca', { setores: setores });
+    navigation.navigate('Busca', {
+      setores: setores,
+      isUserLoggedIn: isUserLoggedIn,
+    });
   };
 
   const handleBackButton = () => {
