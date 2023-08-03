@@ -29,7 +29,6 @@ import Logo from '../src/brasao.png';
 import AvatarPhoto from '../src/avatarProfile.png';
 
 import LoginModal from './LoginModal.js/LoginModal';
-import Busca from './Busca/Busca';
 
 const Home = () => {
   const [setores, setSetores] = useState([]);

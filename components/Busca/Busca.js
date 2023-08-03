@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ClearIcon from 'react-native-vector-icons/MaterialIcons';
 
 import {
     Container,
     SearchInput,
+    BodyApp,
+    CardBody,
+    SiglaCard,
+    AvatarProfile,
+    TitleCard,
+    RamalCard,
+    PessoaCard,
+    SearchNotFound,
 } from './BuscaStyles';
+
+import AvatarPhoto from '../../src/avatarProfile.png';
 
 const Busca = ({ route }) => {
     const [searchValue, setSearchValue] = useState('');
@@ -61,20 +72,25 @@ const Busca = ({ route }) => {
             )}
 
             <ScrollView>
-                {searchResults.length === 0 ? (
-                    <View style={{ alignItems: 'center', marginTop: 20 }}>
-                        <Text>{searchValue === '' ? 'Digite sua pesquisa' : 'Nenhum resultado encontrado.'}</Text>
-                    </View>
-                ) : (
-                    searchResults.map((result) => (
-                        <TouchableOpacity key={result.id} onPress={() => console.log('Clicou no resultado: ', result)}>
-                            <Text>{result.sigla}</Text>
-                            <Text>{result.title}</Text>
-                            <Text>{result.nome}</Text>
-                            <Text>{result.ramal}</Text>
-                        </TouchableOpacity>
-                    ))
-                )}
+                <BodyApp>
+                    {searchResults.length === 0 ? (
+                        <View style={{ alignItems: 'center', marginTop: 20 }}>
+                            <SearchNotFound>{searchValue === '' ? 'Pesquise por nome, ramal, setor ou sigla' : 'Nenhum resultado encontrado.'}</SearchNotFound>
+                        </View>
+                    ) : (
+                        searchResults.map((result) => (
+
+                            <CardBody key={result.id}>
+                                <SiglaCard>{result.sigla}</SiglaCard>
+                                <AvatarProfile source={AvatarPhoto} resizeMode="contain" />
+                                <TitleCard><Icon name="office-building-marker" size={25} color="#008000" /> {result.title}</TitleCard>
+                                <PessoaCard><Icon name="account-group" size={25} color="#008000" /> Responsável: {result.nome}</PessoaCard>
+                                <RamalCard><Icon name="phone" size={25} color="#008000" /> Ramal: {result.ramal}</RamalCard>
+                            </CardBody>
+
+                        ))
+                    )}
+                </BodyApp>
             </ScrollView>
         </Container>
     );

@@ -32,16 +32,6 @@ export const HeaderConfigView = styled.View`
     padding-bottom: 15px;
 `;
 
-export const InputSearch = styled.TextInput`
-    margin-top: 25px;
-    width: 95%;
-    height: 40px;
-    padding-left: 10px;
-    border-radius:5px;
-    background-color: #008000;
-    color: white;
-`;
-
 export const BodyApp = styled.View`
     align-items: center;
 `;
@@ -59,10 +49,6 @@ export const AvatarProfile = styled.Image`
     height: 40px;
     width: 40px;
     border-radius: 50px;
-`;
-
-export const TextCardControl = styled.Text`
-    color:  #008000;
 `;
 
 export const BtnLogin = styled(Button)`
