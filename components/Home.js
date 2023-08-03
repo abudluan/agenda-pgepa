@@ -29,6 +29,7 @@ import Logo from '../src/brasao.png';
 import AvatarPhoto from '../src/avatarProfile.png';
 
 import LoginModal from './LoginModal.js/LoginModal';
+import Busca from './Busca/Busca';
 
 const Home = () => {
   const [setores, setSetores] = useState([]);
@@ -41,7 +42,6 @@ const Home = () => {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -82,37 +82,6 @@ const Home = () => {
       clearInterval(interval);
     };
   }, []);
-
-
-  useEffect(() => {
-    handleSearch();
-  }, [searchValue]);
-
-  const handleSearch = () => {
-    const formattedSearchValue = searchValue.toLowerCase();
-
-    if (formattedSearchValue === '') {
-      setFilteredSetores(setores);
-      setSearchNotFound(false);
-    } else {
-      const filteredSetores = setores.filter((setor) => {
-        const formattedNome = setor.nome.toLowerCase();
-        const formattedRamal = setor.ramal.toLowerCase();
-        const formattedSigla = setor.sigla.toLowerCase();
-        const formattedTitle = setor.title.toLowerCase();
-
-        return (
-          formattedNome.includes(formattedSearchValue) ||
-          formattedSigla.includes(formattedSearchValue) ||
-          formattedTitle.includes(formattedSearchValue) ||
-          formattedRamal.includes(formattedSearchValue)
-        );
-      });
-
-      setFilteredSetores(filteredSetores);
-      setSearchNotFound(filteredSetores.length === 0);
-    }
-  };
 
   const handleFormLogin = () => {
     setShowModal(true);
@@ -181,7 +150,7 @@ const Home = () => {
   };
 
   const handlePesquisa = () => {
-    navigation.navigate('Busca');
+    navigation.navigate('Busca', { setores: setores });
   };
 
   const handleBackButton = () => {
@@ -234,7 +203,6 @@ const Home = () => {
             setIsUserLoggedIn={setIsUserLoggedIn}
           />
         </HeaderApp>
-
 
         <ScrollView>
           {loading ? (
