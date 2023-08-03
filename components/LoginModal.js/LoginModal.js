@@ -69,7 +69,7 @@ const LoginModal = ({ showModal, setShowModal, setIsUserLoggedIn }) => {
           <Button.Group space={2}>
             <Button
               onPress={handleLogin}
-              colorScheme="green"
+              colorScheme="success"
               isLoading={loading}
               disabled={loading}
             >

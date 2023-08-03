@@ -25,13 +25,6 @@ export const TextHeader = styled.Text`
     font-weight: bold;
 `;
 
-export const BtnRefresh = styled(Button)`
-    width: 30%;
-    margin-top: 10px;
-    margin-left: 258px;
-    background-color: black;
-`;
-
 export const InputSearch = styled.TextInput`
     margin-top: 25px;
     width: 95%;
