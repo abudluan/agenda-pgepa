@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginModal = ({ showModal, setShowModal, setIsUserLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setLoading(true);
     if (!email || !password) {
       Toast.show({
@@ -22,25 +23,29 @@ const LoginModal = ({ showModal, setShowModal, setIsUserLoggedIn }) => {
       return;
     }
 
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log('Usuário logado:', userCredential.user);
-        setIsUserLoggedIn(true);
-        setShowModal(false);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log('Erro de autenticação:', error.message);
-        Toast.show({
-          title: 'Erro de autenticação',
-          description: 'Credenciais inválidas. Por favor, verifique suas informações de login.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        setLoading(false);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log('Usuário logado:', userCredential.user);
+      setIsUserLoggedIn(true);
+      setShowModal(false);
+      setLoading(false);
+
+      // Salvar o estado de autenticação no AsyncStorage
+      await AsyncStorage.setItem('isUserLoggedIn', 'true');
+    } catch (error) {
+      console.log('Erro de autenticação:', error.message);
+      Toast.show({
+        title: 'Erro de autenticação',
+        description: 'Credenciais inválidas. Por favor, verifique suas informações de login.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
       });
+      setLoading(false);
+    }
   };
+
+
 
   return (
     <Modal isOpen={showModal} onClose={() => setShowModal(false)}>

@@ -8,6 +8,7 @@ import VerifyVersion from './components/VerifyVersion';
 import Home from './components/Home';
 import AddContact from './components/AddContact/AddContact';
 import EditContact from './components/EditContact/EditContact';
+import Busca from './components/Busca/Busca';
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,7 @@ const App = () => {
     <NavigationContainer>
       <StatusBar backgroundColor="#008000" barStyle="light-content" />
       <Stack.Navigator >
-      <Stack.Screen name="VerifyVersion" component={VerifyVersion} options={{ headerShown: false }} />
+        <Stack.Screen name="VerifyVersion" component={VerifyVersion} options={{ headerShown: false }} />
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="AddContact" component={AddContact} options={{
           headerShown: true,
@@ -50,7 +51,17 @@ const App = () => {
           headerTitleAlign: 'center',
           headerTintColor: '#fff',
         }} />
+        <Stack.Screen name="Busca" component={Busca} options={{
+          headerShown: true,
+          title: 'Pesquisa',
+          headerStyle: {
+            backgroundColor: '#008000',
+          },
+          headerTitleAlign: 'center',
+          headerTintColor: '#fff',
+        }} />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 };

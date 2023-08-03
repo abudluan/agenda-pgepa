@@ -18,11 +18,18 @@ export const ImgHeader = styled.Image`
 `;
 
 export const TextHeader = styled.Text`
-    height: 80px;
+    height: 50px;
     color: white;
     font-size: 24px;
     margin: auto;
     font-weight: bold;
+`;
+
+export const HeaderConfigView = styled.View`
+    flex-direction: row;
+    width: 95%;
+    justify-content: flex-end;
+    padding-bottom: 15px;
 `;
 
 export const InputSearch = styled.TextInput`

@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import ClearIcon from 'react-native-vector-icons/MaterialIcons';
-import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, RefreshControl } from 'react-native';
+import { ScrollView, ActivityIndicator, View, TouchableOpacity, Text, BackHandler } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeBaseProvider, Modal, FormControl, Input, Button, Toast, Spinner, Box } from 'native-base';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import SearchIcon from 'react-native-vector-icons/Feather';
+import AddContactIcon from 'react-native-vector-icons/AntDesign';
 import { addDoc, collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db, auth } from '../firebaseConfig';
-import { BackHandler } from 'react-native';
 import {
   Container,
   HeaderApp,
   ImgHeader,
   TextHeader,
-  InputSearch,
+  HeaderConfigView,
   BodyApp,
   CardBody,
   AvatarProfile,
@@ -39,8 +39,6 @@ const Home = () => {
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
 
@@ -116,10 +114,6 @@ const Home = () => {
     }
   };
 
-  const handleClearSearch = () => {
-    setSearchValue('');
-  };
-
   const handleFormLogin = () => {
     setShowModal(true);
   };
@@ -141,30 +135,9 @@ const Home = () => {
     }
   };
 
-  const handleLogin = () => {
-    setLoading(true);
-    if (!email || !password) {
-      Toast.show({
-        title: 'Campos vazios',
-        description: 'Por favor, preencha todos os campos.',
-        status: 'warning',
-        duration: 3000,
-        isClosable: true,
-      })
-      setLoading(false);
-      return;
-    }
-  };
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsUserLoggedIn(false);
-    AsyncStorage.removeItem('isUserLoggedIn')
-      .then(() => {
-        console.log('Estado de autenticação removido com sucesso.');
-      })
-      .catch((error) => {
-        console.log('Erro ao remover o estado de autenticação:', error);
-      });
+    await AsyncStorage.removeItem('isUserLoggedIn');
   };
 
   const handleSelectContact = (setorId) => {
@@ -207,6 +180,10 @@ const Home = () => {
     navigation.navigate('EditContact', { setorId });
   };
 
+  const handlePesquisa = () => {
+    navigation.navigate('Busca');
+  };
+
   const handleBackButton = () => {
     BackHandler.exitApp();
     return true;
@@ -221,52 +198,42 @@ const Home = () => {
     <NativeBaseProvider>
       <Container>
         <HeaderApp>
-          {isUserLoggedIn && (
-            <View style={{ position: 'absolute', left: 20, top: 55 }}>
-              <TouchableOpacity onPress={() => navigation.navigate('AddContact')}>
-                <Icon name="account-plus" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          )}
           <TextHeader>
             <ImgHeader source={Logo} />
             Agenda PGE-PA
           </TextHeader>
-          <View style={{ position: 'absolute', right: 16, top: 55 }}>
-            {isUserLoggedIn ? (
-              <TouchableOpacity onPress={handleLogout}>
-                <Icon name="logout" size={28} color="white" />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={handleFormLogin}>
-                <Icon name="login" size={28} color="white" />
+
+          <HeaderConfigView>
+            {isUserLoggedIn && (
+              <TouchableOpacity style={{ right: 30 }} onPress={() => navigation.navigate('AddContact')}>
+                <AddContactIcon name="plus" size={27} color="white" />
               </TouchableOpacity>
             )}
-          </View>
+            <TouchableOpacity>
+
+              <TouchableOpacity onPress={handlePesquisa} style={{ right: 20 }}>
+                <SearchIcon name="search" size={25} color="white" />
+              </TouchableOpacity>
+
+
+            </TouchableOpacity>
+            {isUserLoggedIn ? (
+              <TouchableOpacity style={{ right: 5 }} onPress={handleLogout}>
+                <Icon name="logout" size={27} color="white" />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={{ right: 5 }} onPress={handleFormLogin}>
+                <Icon name="login" size={27} color="white" />
+              </TouchableOpacity>
+            )}
+          </HeaderConfigView>
 
           <LoginModal
             showModal={showModal}
             setShowModal={setShowModal}
             setIsUserLoggedIn={setIsUserLoggedIn}
           />
-
         </HeaderApp>
-
-        <View style={{ top: -15, alignItems: 'center' }}>
-          <InputSearch
-            placeholder="Digite sua pesquisa..."
-            placeholderTextColor="#fff"
-            selectionColor="white"
-            value={searchValue}
-            onChangeText={(text) => setSearchValue(text)}
-          />
-          {searchValue !== '' && (
-            <TouchableOpacity onPress={handleClearSearch} style={{ position: 'absolute', right: 20, top: 32 }}>
-              <ClearIcon name="close" size={24} color="white" />
-            </TouchableOpacity>
-          )}
-        </View>
-
 
 
         <ScrollView>
